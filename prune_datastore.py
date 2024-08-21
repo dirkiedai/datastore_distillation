@@ -19,42 +19,37 @@ logging.basicConfig(
 def parse_args():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('--dataset', type=str, help='dataset')
-    parser.add_argument('--dstore_filename', type=str, help='memmap where keys and vals are stored')
-    parser.add_argument('--dstore_size', type=int, help='number of items saved in the datastore memmap')
-    parser.add_argument('--dimension', type=int, default=1024, help='Size of each key')
-    parser.add_argument('--dstore_fp16', default=False, action='store_true')
-    parser.add_argument('--seed', type=int, default=1,
-                        help='random seed for sampling the subset of vectors to train the cache')
-    parser.add_argument('--ncentroids', type=int, default=4096, help='number of centroids faiss should learn')
-    parser.add_argument('--code_size', type=int, default=64, help='size of quantized vectors')
-    parser.add_argument('--probe', type=int, default=32, help='number of clusters to query')
-    parser.add_argument('--faiss_index', type=str, help='file to write the faiss index')
-    parser.add_argument('--num_keys_to_add_at_a_time', default=500000, type=int,
-                        help='can only load a certain amount of data to memory at a time.')
-    parser.add_argument('--starting_point', type=int, default=0, help='index to start adding keys at')
+    parser.add_argument('--dataset', type=str, help='Name of the dataset to be used.')
+    parser.add_argument('--dstore_filename', type=str, help='Path to the memory-mapped file storing keys and values.')
+    parser.add_argument('--dstore_size', type=int, help='Number of items in the datastore memory map.')
+    parser.add_argument('--dimension', type=int, default=1024, help='Dimensionality of each key.')
+    parser.add_argument('--dstore_fp16', default=False, action='store_true', help='Use 16-bit floating point precision for datastore.')
+    parser.add_argument('--seed', type=int, default=1, help='Random seed for sampling vectors.')
+    parser.add_argument('--ncentroids', type=int, default=4096, help='Number of centroids for FAISS to learn.')
+    parser.add_argument('--code_size', type=int, default=64, help='Size of quantized vectors.')
+    parser.add_argument('--probe', type=int, default=32, help='Number of clusters to search during retrieval.')
+    parser.add_argument('--faiss_index', type=str, help='Path to save the FAISS index.')
+    parser.add_argument('--num_keys_to_add_at_a_time', type=int, default=500000, help='Limit on the number of keys loaded into memory at a time.')
+    parser.add_argument('--starting_point', type=int, default=0, help='Index to start adding keys.')
 
-    parser.add_argument('--load_to_mem', default=False, action='store_true')
-    parser.add_argument('--no_load_keys_to_mem', default=False, action='store_true')
+    parser.add_argument('--load_to_mem', default=False, action='store_true', help='Load the entire datastore into memory.')
+    parser.add_argument('--no_load_keys_to_mem', default=False, action='store_true', help='Prevent loading keys into memory.')
 
+    parser.add_argument('--batch_size', type=int, default=128, help='Batch size for processing.')
+    parser.add_argument('--k', type=int, default=8, help='Number of nearest neighbors to retrieve during distillation.')
+    parser.add_argument('--retrieve_k', type=int, default=128, help='Number of cached nearest neighbors to search during retrieval.')
+    parser.add_argument('--use_gpu_to_search', default=False, action='store_true', help='Use GPU for searching the FAISS index.')
 
-    parser.add_argument('--batch_size', type=int, default=128, help='batch size')
-    parser.add_argument('--k', type=int, default=8, help='batch size')
-    parser.add_argument('--retrieve_k', type=int, default=128, help='batch size')
-    parser.add_argument('--use_gpu_to_search', default=False, action='store_true')
+    parser.add_argument('--pca', type=int, default=0, help='Reduce dimensionality using PCA.')
+    parser.add_argument('--store_dstore_filename', type=str, help='Path to store the reduced datastore.')
 
-    parser.add_argument('--pca', type=int, default=0, help='pca dimension')
+    parser.add_argument('--vocab_size', type=int, default=42024, help='Size of the vocabulary.')
+    parser.add_argument('--token_constrained', default=False, action='store_true', help='Restrict retrieval to specific tokens.')
+    parser.add_argument('--interpolation', default=False, action='store_true', help='Enable interpolation strategy in point merging process.')
 
-    parser.add_argument('--store_dstore_filename', type=str, help='memmap where keys and vals are stored')
-
-    parser.add_argument('--vocab_size', type=int, default=42024)
-
-    parser.add_argument('--token_constrained', default=False, action='store_true' )
-    parser.add_argument('--interpolation', default=False, action='store_true', help='interpolation strategy')
-
-    parser.add_argument('--use_cache', default=False, action='store_true')
-    parser.add_argument('--load_cache_to_mem', default=False, action='store_true')
-    parser.add_argument('--cache_path', type=str, help='memmap where keys and vals are stored')
+    parser.add_argument('--use_cache', default=False, action='store_true', help='Enable caching retrieved knns and dists.')
+    parser.add_argument('--load_cache_to_mem', default=False, action='store_true', help='Load cache into memory.')
+    parser.add_argument('--cache_path', type=str, help='Path to the memory-mapped file storing cache keys and values.')
 
     args = parser.parse_args()
     return args
