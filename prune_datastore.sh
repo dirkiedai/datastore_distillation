@@ -1,16 +1,20 @@
-# DSTORE_SIZE_DICT = {
-#     'it': 3613350,
-#     'medical': 6903320, 
-#     'law': 19070000,
-#     'wikitext-103': 103225485,
-# }
+#!/bin/bash
+
+declare -A DSTORE_SIZE_DICT
+
+DSTORE_SIZE_DICT=(
+    ["it"]=3613350
+    ["medical"]=6903320
+    ["law"]=19070000
+    ["wikitext-103"]=103225485
+)
 
 DATASET="it"
 python prune_datastore.py \
     --dataset $DATASET \
     --dstore_filename datastore/$DATASET \
     --faiss_index datastore/$DATASET/knn_index \
-    --dstore_size 3613350 \
+    --dstore_size ${DSTORE_SIZE_DICT[$key]} \
     --dstore_fp16 \
     --k 8 \
     --retrieve_k 128 \
