@@ -13,7 +13,7 @@ Please refer to the original [kNN-MT](https://github.com/urvashik/knnmt).
 You can prune the datastore by simply running our provided shell script.
 
 ### Evaluation
-
+Once you have prepared the pruned datastore, you can evaluate the results under [adaptive-knn-mt](https://github.com/zhengxxn/adaptive-knn-mt)
 ## Citation
 If you find this repo helpful for your research, please cite the following paper:
 ```
