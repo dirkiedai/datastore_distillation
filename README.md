@@ -14,3 +14,17 @@ You can prune the datastore by simply running our provided shell script.
 
 ### Evaluation
 
+## Citation
+If you find this repo helpful for your research, please cite the following paper:
+```
+@ARTICLE{10334021,
+  author={Dai, Yuhan and Zhang, Zhirui and Du, Yichao and Liu, Shengcai and Liu, Lemao and Xu, Tong},
+  journal={IEEE/ACM Transactions on Audio, Speech, and Language Processing}, 
+  title={Datastore Distillation for Nearest Neighbor Machine Translation}, 
+  year={2024},
+  volume={32},
+  number={},
+  pages={807-817},
+  keywords={Merging;Machine translation;Speech processing;Optimization;Iterative methods;Iterative decoding;Task analysis;Nearest neighbor machine translation;datastore distillation},
+  doi={10.1109/TASLP.2023.3337633}}
+```
